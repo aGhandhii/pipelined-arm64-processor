@@ -194,33 +194,13 @@ By inverting the clock signal to the stored flag flip flops `~clk`, we allow the
 
 </details>
 
-### Forwarding Logic
-
-<details>
-
-The `Forwarding Unit` module has been added to handle forwarding for the pipelined processor. This module is placed outside of the pipeline, between Instruction Decode and Execution, and resolves values passed into the execution stage.
-
-The unit takes Register File IO from the current ID, ALU outputs from the past EX, and DataMem/MOV/ALU outputs from the past MA. By comparing the instruction for each stage, as well as the values for Rd, Rn, Rm, we determine what the updated EX ALU input values must be BEFORE proceeding into EX.
-
-This unit has a few key exceptions that prevent unwanted behavior from occuring:
-
-If the previous instruction was a branch, the output from that instruction can be ignored.
-
-If both EX and MA attempt to write to the SAME register, we give port-priority to the EX stage: we assume that in a previous stage, the updated register value (that we are getting from MA currently) was sent to the EX stage one cycle ago, and that the most recent update to the register is reflected in the output from EX.
-
-A value 'calculated' for register X31 will NEVER be forwarded, as it should always be zero.
-
-If any future command was a STORE command `STUR/STURB` we do not need to forward the value.
-
-An `LDUR/LDURB` command can only forward TWO stages ahead (from MA), as our implementation will not have the value from Data Memory until the end of MA. Whatever command is set to execute after a load will execute regardless to the requested changes to `Rd`, and cannot recieve the value from a LOAD command executed ONE CYCLE before it.
-
-</details>
-
 ### Forwarding Unit
 
 <details>
 
-<summary> Forwarding Unit and Control Signal Details </summary>
+<summary> Forwarding Unit Details </summary>
+
+![image](../Images/ForwardUnit.png)
 
 Control Signal | Value | Description
 --- | --- | ---
@@ -238,7 +218,21 @@ MA_isStore  | MA_MemWrite &&<br>~MA_MemRead &&<br>~MA_RegWrite                 |
 MA_isX31    | isEqual5(MA_Rd, 5'd31)                                           | If Rd for Memory Access is X31
 MA_isValid  | ~MA_isBranch &&<br>~MA_isStore &&<br>~MA_isX31                   | Validity for Memory Access output for forwarding
 
-![image](../Images/ForwardUnit.png)
+The `Forwarding Unit` module has been added to handle forwarding for the pipelined processor. This module is placed outside of the pipeline, between Instruction Decode and Execution, and resolves values passed into the execution stage.
+
+The unit takes Register File IO from the current ID, ALU outputs from the past EX, and DataMem/MOV/ALU outputs from the past MA. By comparing the instruction for each stage, as well as the values for Rd, Rn, Rm, we determine what the updated EX ALU input values must be BEFORE proceeding into EX.
+
+This unit has a few key exceptions that prevent unwanted behavior from occuring:
+
+If the previous instruction was a branch, the output from that instruction can be ignored.
+
+If both EX and MA attempt to write to the SAME register, we give port-priority to the EX stage: we assume that in a previous stage, the updated register value (that we are getting from MA currently) was sent to the EX stage one cycle ago, and that the most recent update to the register is reflected in the output from EX.
+
+A value 'calculated' for register X31 will NEVER be forwarded, as it should always be zero.
+
+If any future command was a STORE command `STUR/STURB` we do not need to forward the value.
+
+An `LDUR/LDURB` command can only forward TWO stages ahead (from MA), as our implementation will not have the value from Data Memory until the end of MA. Whatever command is set to execute after a load will execute regardless to the requested changes to `Rd`, and cannot recieve the value from a LOAD command executed ONE CYCLE before it.
 
 </details>
 

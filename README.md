@@ -8,6 +8,10 @@ Includes both a single-stage and a 5-stage pipelined processor.
 
 Based on the LEGv8 specification in *Computer Organization and Design, The Hardware Software Interface: ARM EDITION* by David A. Patterson and John L. Hennessy.
 
+This project is an adaptation of a Lab from my university coursework.
+
+### **While this code is open-source, submitting copied code for a grade at any educational institution is considered plagarism.**
+
 ## File Structure Overview
 
 Folder | Description
