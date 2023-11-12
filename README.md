@@ -1,8 +1,8 @@
 <div align="center">
 
-# 5-Stage Pipelined ARM Processor
+# Pipelined 64-Bit ARM Processor
 
-Gate-Level implementation of a Reduced-Instruction Set 64-bit ARM Processor.
+A SystemVerilog implementation of an ARM R-RISC (Really-Reduced Instruction Set Computer).
 
 Includes both a single-stage and a 5-stage pipelined processor.
 
@@ -10,7 +10,7 @@ Based on the LEGv8 specification in *Computer Organization and Design, The Hardw
 
 This project is an adaptation of a Lab from my university coursework.
 
-### **While this code is open-source, submitting copied code for a grade at any educational institution is considered plagarism.**
+### **While this code is open-source, submitting copied code for a grade at any educational institution is plagarism**
 
 ## File Structure Overview
 
